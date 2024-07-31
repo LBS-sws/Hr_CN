@@ -1,0 +1,1 @@
+alter table hr_employee_operate modify wage varchar(20) null;

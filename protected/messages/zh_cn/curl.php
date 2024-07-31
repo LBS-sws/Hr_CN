@@ -1,0 +1,14 @@
+<?php
+return array(
+	'status type'=>'状态',
+	'info type'=>'类型',
+	'info url'=>'请求地址',
+	'data content'=>'请求内容',
+	'out content'=>'响应内容',
+	'cmd content'=>'执行结果',
+	'message'=>'响应说明',
+	'lcu'=>'请求人',
+	'lcd'=>'请求时间',
+	'lud'=>'响应时间',
+);
+?>

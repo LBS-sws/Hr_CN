@@ -1,0 +1,58 @@
+insert into hr.hr_employee 
+(`name`, code, city, company_id, contract_id, user_card, address, contact_address,
+phone, department, position, wage, start_time, end_time, word_status, staff_status,
+entry_time, email, remark, leave_time, leave_reason, staff_type, staff_leader, code_old)
+select a.name, '' as code, a.city,
+ifnull((select b.id from hr_company b where a.city=b.city limit 1),0) as company_id ,
+0 as contract_id,
+'' as user_card,
+'' as address,
+'' as contact_address,
+'' as phone,
+'' as department,
+'' as position,
+0 as wage,
+ifnull(a.ctrt_start_dt, '1900-01-01'),
+if(a.ctrt_renew_dt is null, '', date_format(a.ctrt_renew_dt, '%Y-%m-%d')) as renwe_dt,
+0 as word_status,
+if(a.leave_dt is not null, -1, 0) as staff_status,
+if (a.join_dt is null, '', date_format(a.join_dt, '%Y-%m-%d')),
+a.email,
+a.remarks,
+if (a.leave_dt is null, '', date_format(a.leave_dt, '%Y-%m-%d')) as leave_dt,
+a.leave_reason,
+if(a.staff_type='OFFICE','Office',if(a.staff_type='TECHNICIAN','Technician',if(a.staff_type='SALES','Sales','Others'))) as staff_type,
+if(a.leader='GROUP','Group Leader',if(a.leader='TEAM','Team Leader','Nil')) as staff_leader,
+a.code
+from swoper.swo_staff a;
+
+update hr.hr_employee set end_time=if(end_time is null or end_time='', '', date_sub(end_time, interval 1 day));
+
+update hr.hr_employee set code=400100+id;
+
+update sec_user_access set
+a_read_write = replace(a_read_write, 'A07',''),
+a_read_only = if(a_read_only like '%A07%', a_read_only, concat(a_read_only,'A07')) 
+where system_id='drs' and a_read_write like '%A07%';
+
+
+create view swo_staff_v as
+select 
+a.id, a.code, a.name, b.name as position,
+if(a.staff_type='Office','OFFICE',if(a.staff_type='Technician','TECHNICIAN',if(a.staff_type='Sales','SALES','OTHERS'))) as staff_type,
+if(a.staff_leader='Group Leader','GROUP',if(a.staff_leader='Team Leader','TEAM','NIL')) as leader,
+if(a.entry_time is null or a.entry_time='', null, ifnull(str_to_date(a.entry_time, '%Y/%m/%d'),str_to_date(a.entry_time, '%Y-%m-%d'))) as join_dt,
+a.start_time as ctrt_start_dt,
+timestampdiff(month, a.start_time, date_add(ifnull(str_to_date(a.end_time, '%Y/%m/%d'),str_to_date(a.end_time, '%Y-%m-%d')), interval 1 day)) as ctrt_period,
+if(a.end_time is null or a.end_time='', null, date_add(ifnull(str_to_date(a.end_time, '%Y/%m/%d'),str_to_date(a.end_time, '%Y-%m-%d')), interval 1 day)) as ctrt_renew_dt,
+a.email,
+if(a.leave_time is null or a.leave_time='', null, ifnull(str_to_date(a.leave_time, '%Y/%m/%d'),str_to_date(a.leave_time, '%Y-%m-%d'))) as leave_dt,
+a.leave_reason,
+a.remark as remarks,
+a.city,
+a.lcu,
+a.luu,
+a.lcd,
+a.lud
+from hr.hr_employee a
+left outer join hr.hr_dept b on a.position=b.id;

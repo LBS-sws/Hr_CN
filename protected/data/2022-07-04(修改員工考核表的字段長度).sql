@@ -1,0 +1,1 @@
+alter table hr_review modify column change_num float(5,2) NOT NULL DEFAULT '0.00' COMMENT '請假天數（技術員）或者評核得分（銷售）';
