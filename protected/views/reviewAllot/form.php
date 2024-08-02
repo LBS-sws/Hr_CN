@@ -10,7 +10,9 @@ $this->pageTitle=Yii::app()->name . ' - ReviewAllot Form';
     'htmlOptions'=>array('enctype' => 'multipart/form-data')
 )); ?>
 <style>
-    select[readonly="readonly"]{pointer-events: none;}
+    input[readonly]{pointer-events: none;}
+    select[readonly]{pointer-events: none;}
+    .select2-container .select2-selection--single{ height: 34px;}
 </style>
 
 <section class="content-header">
@@ -125,6 +127,27 @@ $this->renderPartial('//site/fileupload',$fileUpload);
 <?php
 Script::genFileUpload($model,$form->id,'REVIEW');
 
+
+switch(Yii::app()->language) {
+    case 'zh_cn': $lang = 'zh-CN'; break;
+    case 'zh_tw': $lang = 'zh-TW'; break;
+    default: $lang = Yii::app()->language;
+}
+$disabled = ($model->scenario!='view') ? 'false' : 'true';
+$js="
+$('.selectStaff').select2({
+    multiple: false,
+    maximumInputLength: 10,
+    language: '$lang',
+    disabled: $disabled
+});
+function formatState(state) {
+	var rtn = $('<span style=\"color:black\">'+state.text+'</span>');
+	return rtn;
+}
+";
+Yii::app()->clientScript->registerScript('searchStaffFunction',$js,CClientScript::POS_READY);
+
 $js = "
     $(\"select[name^='ReviewAllotForm[tem_list]']\").attr('readonly','readonly').addClass('readonly');
     var rowHtml = $('#readyOne').html();
@@ -136,6 +159,12 @@ $js = "
         $('#managerTable>tbody').data('num',num)
         var newHtml = rowHtml.replace(/:num/g,num);
         $('#managerTable>tbody').append(newHtml);
+        $('#managerTable>tbody').find('.selectStaff').last().select2({
+            multiple: false,
+            maximumInputLength: 10,
+            language: '$lang',
+            disabled: $disabled
+        });
     });
     
     $('#managerTable').delegate('.delManager','click',function(){
