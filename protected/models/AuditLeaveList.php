@@ -66,8 +66,8 @@ class AuditLeaveList extends CListPageModel
         }
         switch ($only){
             case 1: //部門審核
-                $sql1.=" AND b.department = '$department' ";
-                $sql2.=" AND b.department = '$department' ";
+                $sql1.=" AND b.city = '$city'  AND b.department = '$department' ";
+                $sql2.=" AND b.city = '$city'  AND b.department = '$department' ";
                 break;
             case 2: //主管
                 $sql1.=" AND b.city = '$city' ";

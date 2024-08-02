@@ -150,7 +150,7 @@ class AuditWorkForm extends CFormModel
         $sql = " a.status in (1,3) AND a.z_index =$only and a.id=:id";
         switch ($only){
             case 1: //部門審核
-                $sql.=" AND b.department = '$department' ";
+                $sql.=" AND b.city = '$city'  AND b.department = '$department' ";
                 break;
             case 2: //主管
                 $sql.=" AND b.city = '$city' ";

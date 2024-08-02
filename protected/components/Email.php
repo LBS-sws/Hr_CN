@@ -398,6 +398,48 @@ class Email {
         }
     }
 
+    //添加收信人(根據權限和部門）
+    public function addEmailToPrefixAndPoiRow($str,$row=array()){
+        $city = key_exists("city",$row)?$row["city"]:0;
+        $department = key_exists("department",$row)?$row["department"]:0;
+        $groupType = key_exists("group_type",$row)?$row["group_type"]:0;
+        $suffix = Yii::app()->params['envSuffix'];
+        $systemId = Yii::app()->params['systemId'];
+        $sql = " and d.city = '$city' and d.department = '$department' ";
+        if(!empty($groupType)){
+            $sql.=" and d.group_type in (0,$groupType) ";
+        }
+        if(!is_array($str)){
+            $likeSql = " and a.a_read_write like '%$str%'";
+        }else{
+            $likeSql =" and (";
+            foreach ($str as $key =>$item){
+                if($key != 0){
+                    $likeSql.=" or ";
+                }
+                $likeSql .= "a.a_read_write like '%$item%'";
+            }
+            $likeSql .=")";
+        }
+        $rs = Yii::app()->db->createCommand()->select("b.email, b.username")->from("hr$suffix.hr_binding e")
+            ->leftJoin("hr$suffix.hr_employee d","d.id = e.employee_id")
+            ->leftJoin("hr$suffix.hr_dept f","f.id = d.position")
+            ->leftJoin("security$suffix.sec_user_access a","a.username = e.user_id")
+            ->leftJoin("security$suffix.sec_user b","a.username=b.username")
+            ->where("a.system_id='$systemId' $likeSql $sql and b.email != '' and b.status='A'")
+            ->queryAll();
+        if($rs){
+            foreach ($rs as $row){
+                if(!in_array($row["email"],$this->to_addr)){
+                    $this->to_addr[] = $row["email"];
+                }
+                if(!in_array($row["username"],$this->to_user)){	//因通知記錄需要
+                    $this->to_user[] = $row["username"];
+                }
+            }
+        }
+    }
+
     //添加收信人(lcu）
     public function addEmailToLcu($lcu){
         $suffix = Yii::app()->params['envSuffix'];
