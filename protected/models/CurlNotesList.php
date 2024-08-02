@@ -124,6 +124,7 @@ class CurlNotesList extends CListPageModel
     //翻译curl的类型
     public static function getInfoTypeList($key="",$bool=false){
         $list = array(
+            "employeeFull"=>"批量变更员工",
             "employee"=>"员工资料",
             "binding"=>"员工绑定",
             "cross"=>"交叉派单",

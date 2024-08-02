@@ -205,7 +205,7 @@ class CurlBsNotesList extends CListPageModel
 
     public function getBsData($startDate,$endDate,$bool=true){
         $selectData=array(
-            "empStatus"=>null,//人员状态：默认null，示例：[1,2,3,7]（待入职、试用、正式、返聘）。
+            "empStatus"=>array(2,3,4,5,6,8,12),//人员状态：默认null，示例：[1,2,3,7]（待入职、试用、正式、返聘）。
             "employType"=>array(0,1,2),//雇佣类型：默认查询内部员工。示例：[0,2]，表示内部员工、实习生。
             "serviceType"=>array(0,1),//任职类型：默认查询主职。示例：[0]，表示主职。
             "withDisabled"=>true,//是否包含离职的记录

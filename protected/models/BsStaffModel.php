@@ -40,7 +40,7 @@ class BsStaffModel {
             $staffId = self::getEmployeeIdForStaffCode($data["staffList"]["code"]);
         }else{//外部人员
             if(!key_exists("user_card",$data["staffList"])||empty($data["staffList"]["user_card"])){
-                return array("bool"=>true,"error"=>$staffList["name"]."：身份证号不能为空。");
+                return array("bool"=>false,"error"=>$staffList["name"]."：身份证号不能为空。");
             }else{
                 $staffId = self::getEmployeeIdForUserCard($data["staffList"]["user_card"]);
             }
@@ -114,10 +114,10 @@ class BsStaffModel {
             if(!empty($city)){
                 $data["staffList"]["city"] = $city;
             }else{
-                return array("bool"=>false,"error"=>$staffList["name"]."：LBS不存在城市({$bsCityName})。");
+                return array("bool"=>false,"error"=>$staffList["name"]."：不存在LBS地区({$bsCityName})。");
             }
         }else{
-            return array("bool"=>false,"error"=>$staffList["name"]."：不存在城市字段。");
+            return array("bool"=>false,"error"=>$staffList["name"]."：不存在LBS地区字段。");
         }
         /*
         //城市 （新）extlbschengshi_611774_1703426123
@@ -306,6 +306,7 @@ class BsStaffModel {
             $db->createCommand()->insert("hr{$suffix}.hr_employee_history",array(
                 "employee_id"=>$staff_id,
                 "status"=>"bs curl update",
+                "lcu"=>"bsAdmin",
             ));
             $saveData["staffList"]["id"] = $staff_id;
             $saveData["staffList"]["scenario"] = "edit";
@@ -318,6 +319,7 @@ class BsStaffModel {
             $db->createCommand()->insert("hr{$suffix}.hr_employee_history",array(
                 "employee_id"=>$staff_id,
                 "status"=>"bs curl add",
+                "lcu"=>"bsAdmin",
             ));
             $saveData["staffList"]["id"] = $staff_id;
             $saveData["staffList"]["scenario"] = "add";
@@ -383,7 +385,7 @@ class BsStaffModel {
             $returnRes["html"]=$html;
             $returnRes["msg"]="成功数量：".count($successList)."，失败数量：".count($errorList);
         }
-        //$this->sendStaffToU();//把成功员工发送给派单系统
+        $this->sendStaffToU();//把成功员工发送给派单系统
         //$this->sendStaffToEmail();//把失败员工发送给管理员
         return $returnRes;
     }

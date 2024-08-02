@@ -47,7 +47,7 @@ class BsStaffCommand extends CConsoleCommand {
         $endDate = $datetime->setTimestamp($endTime)->format('Y-m-d\TH:i:s');
         $suffix = Yii::app()->params['envSuffix'];
         $row = Yii::app()->db->createCommand()->select()->from("hr{$suffix}.hr_bs_api_curl")
-            ->where("source_time='{$startDate}' and lcu='admin'")->queryRow();
+            ->where("source_time='{$startDate}' and lcu='bsAdmin'")->queryRow();
         if($row){
             //已执行，等待下一个1小时
         }else{
