@@ -256,17 +256,31 @@
     <?php echo $form->label($model,'department',array('class'=>"col-sm-2 control-label",
         'required'=>$model->isRequired("department"))); ?>
     <div class="col-sm-3">
-        <?php echo $form->dropDownList($model, 'department',DeptForm::getDeptListToCity($model->department,$model->city),
-            array('disabled'=>($readonly),"class"=>"","id"=>"department")
-        ); ?>
+        <?php
+        if($readonly){
+            echo $form->hiddenField($model, 'department',array("id"=>"department"));
+            echo TbHtml::textField("department",DeptForm::getDeptToId($model->department),array("readonly"=>true));
+        }else{
+            echo $form->dropDownList($model, 'department',DeptForm::getDeptListToCity($model->department,$model->city),
+                array('disabled'=>($readonly),"class"=>"","id"=>"department")
+            );
+        }
+        ?>
     </div>
     <!--分割-->
     <?php echo $form->label($model,'position',array('class'=>"col-sm-2 control-label",
         'required'=>$model->isRequired("position"))); ?>
     <div class="col-sm-3">
-        <?php echo $form->dropDownList($model, 'position',DeptForm::getPosiList($model->position),
-            array('disabled'=>($readonly),"class"=>"","id"=>"position")
-        ); ?>
+        <?php
+        if($readonly){
+            echo $form->hiddenField($model, 'position',array("id"=>"position"));
+            echo TbHtml::textField("position",DeptForm::getDeptToId($model->position),array("readonly"=>true));
+        }else{
+            echo $form->dropDownList($model, 'position',DeptForm::getPosiList($model->position),
+                array('disabled'=>($readonly),"class"=>"","id"=>"position")
+            );
+        }
+        ?>
     </div>
 </div>
 <div class="form-group">
