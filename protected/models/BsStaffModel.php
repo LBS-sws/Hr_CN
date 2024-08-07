@@ -450,9 +450,10 @@ class BsStaffModel {
             }
             $html.="</tbody></table>";
             $emailModel->setMessage($html);
-            $userList=array("tonymeng","Effy","amy.gz","Alvin.sh");//收件人邮箱
+            $userList=array("tonymeng","amy.gz","Alvin.sh");//收件人邮箱
             //$userList=array("shenchao");//收件人邮箱
             $emailModel->addEmailToLcuList($userList);
+            $emailModel->addCCEmailToLcu("Effy");//特别要求:需要抄送
             $content = $this->getExcelForError($errorList);
             $emailModel->insertAttr("报错明细.xlsx",$content);
             $systemId = Yii::app()->params['systemId'];

@@ -4,6 +4,7 @@ class Email {
 
     //强制刷新本文件
     protected $to_addr=array();//收信人郵箱
+    protected $cc_addr=array();//抄送郵箱
     protected $subject;//郵件主題
     protected $description;//郵件副題
     protected $message;//郵件內容（html）
@@ -456,6 +457,22 @@ class Email {
         }
     }
 
+    //添加收信人(lcu）
+    public function addCCEmailToLcu($lcu){
+        $suffix = Yii::app()->params['envSuffix'];
+        $email = Yii::app()->db->createCommand()->select("email, username")->from("security$suffix.sec_user")
+            ->where("username=:username and email !='' and status='A'",array(":username"=>$lcu))
+            ->queryRow();
+        if($email){
+            if(!in_array($email["email"],$this->to_addr)&&!in_array($email["email"],$this->cc_addr)){
+                $this->cc_addr[] = $email["email"];
+            }
+            if(!in_array($email["username"],$this->to_user)){	//因通知記錄需要
+                $this->to_user[] = $email["username"];
+            }
+        }
+    }
+
     //添加收信人(lcu）多个账号
     public function addEmailToLcuList($lcuList){
         if(is_array($lcuList)){
@@ -500,6 +517,7 @@ class Email {
             return false;
         }
         $to_addr = empty($this->to_addr)?json_encode(array("it@lbsgroup.com.hk")):json_encode($this->to_addr);
+        $cc_addr = empty($this->cc_addr)?null:json_encode($this->cc_addr);
         if(empty($uid)){
             $uid = Yii::app()->user->id;
         }
@@ -512,6 +530,7 @@ class Email {
             'request_dt'=>$request_dt,
             'from_addr'=>$from_addr,
             'to_addr'=>$to_addr,
+            'cc_addr'=>$cc_addr,
             'subject'=>$this->subject,//郵件主題
             'description'=>$this->description,//郵件副題
             'message'=>$this->message,//郵件內容（html）
