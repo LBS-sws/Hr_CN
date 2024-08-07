@@ -322,7 +322,7 @@ class BsStaffModel {
                 "lcu"=>"bsAdmin",
             ));
             $saveData["staffList"]["id"] = $staff_id;
-            $saveData["staffList"]["scenario"] = "add";
+            $saveData["staffList"]["scenario"] = "new";
         }
         $staffCode = Yii::app()->db->createCommand()->select("code")->from("hr{$suffix}.hr_employee")
             ->where("id=:id",array(":id"=>$staff_id))->queryRow();
@@ -386,7 +386,7 @@ class BsStaffModel {
             $returnRes["msg"]="成功数量：".count($successList)."，失败数量：".count($errorList);
         }
         $this->sendStaffToU();//把成功员工发送给派单系统
-        //$this->sendStaffToEmail();//把失败员工发送给管理员
+        $this->sendStaffToEmail();//把失败员工发送给管理员
         return $returnRes;
     }
 
@@ -411,7 +411,86 @@ class BsStaffModel {
 
     //把失败员工发送给管理员
     protected function sendStaffToEmail(){
+        if(!empty($this->_errorList)){
+            $errorList = array();
+            $errorSum = count($this->_errorList);
+            $subject = "人事系统同步LBS报错通知";
+            $emailModel = new Email($subject,"",$subject);
+            $html = "<p>下列员工的人事系统同步报错，报错概览共计{$errorSum}人失败。</p>";
+            $html.= "<p>详细见下表或附件，请尽快在北森系统予以处理：</p>";
+            $html.= "<table border='1px' width='800px'>";
+            $html.="<thead><tr>";
+            $html.="<th width='11%'>员工编号</th>";
+            $html.="<th width='11%'>员工姓名</th>";
+            $html.="<th width='15%'>部门</th>";
+            $html.="<th width='23%'>报错内容</th>";
+            $html.="<th width='40%'>建议</th>";
+            $html.="</tr></thead><tbody>";
+            foreach ($this->_errorList as $key=>$row){
+                $data = isset($row["list"])?$row["list"]:array();
+                $staffCode = isset($data["recordInfo"]["jobNumber"])?$data["recordInfo"]["jobNumber"]:"";
+                $staffName = isset($data["employeeInfo"]["name"])?$data["employeeInfo"]["name"]:"";
+                $deptName = isset($data["recordInfo"]["translateProperties"]["OIdDepartmentText"])?$data["recordInfo"]["translateProperties"]["OIdDepartmentText"]:"";
+                $errorList[]=array(
+                    "staffCode"=>$staffCode,
+                    "staffName"=>$staffName,
+                    "deptName"=>$deptName,
+                    "errorMsg"=>$row["msg"],
+                    "remark"=>$key==0?"请北森系统进行维护后待整点同步无报错即同步成功":"",
+                );
+                $html.="<tr>";
+                $html.="<td>{$staffCode}</td>";
+                $html.="<td>{$staffName}</td>";
+                $html.="<td>{$deptName}</td>";
+                $html.="<td>".$row["msg"]."</td>";
+                if($key==0){
+                    $html.="<td rowspan='{$errorSum}'>请北森系统进行维护后待整点同步无报错即同步成功</td>";
+                }
+                $html.="</tr>";
+            }
+            $html.="</tbody></table>";
+            $emailModel->setMessage($html);
+            $userList=array("tonymeng","Effy","amy.gz","Alvin.sh");//收件人邮箱
+            //$userList=array("shenchao");//收件人邮箱
+            $emailModel->addEmailToLcuList($userList);
+            $content = $this->getExcelForError($errorList);
+            $emailModel->insertAttr("报错明细.xlsx",$content);
+            $systemId = Yii::app()->params['systemId'];
+            $emailModel->sent("系统发送",$systemId);
+        }
+    }
 
+    //获取错误详情的excel
+    private function getExcelForError($errorList){
+        $excel = new ExcelToolEx();
+        $excel->start();
+        $excel->newFile();
+        $excel->setReportDefaultFormat();
+        $headList = array("员工编号","员工姓名","部门","报错内容","建议");
+        $bodyList = array("staffCode","staffName","deptName","errorMsg","remark");
+        $rowNum = 1;
+        $excel->setRowHeight($rowNum,22);
+        foreach ($headList as $key=>$item){
+            $excel->setCellFont($key,$rowNum,array("bold"=>true));
+            $excel->writeCell($key,$rowNum,$item);
+            $excel->setColWidth($key,20);
+        }
+        foreach ($errorList as $row){
+            $rowNum++;
+            $excel->setRowHeight($rowNum,22);
+            foreach ($bodyList as $key=>$item){
+                $value = key_exists($item,$row)?$row[$item]:"";
+                $excel->writeCell($key,$rowNum,$value);
+            }
+        }
+        if($rowNum>2){
+            $excel->mergeCells(2, 4, $rowNum, 4);
+        }
+        $excel->setBorderStyle("A1:E{$rowNum}");
+
+        $outstring = $excel->getOutput();
+        $excel->end();
+        return $outstring;
     }
 
     //根据北森staffCode获取LBS员工id

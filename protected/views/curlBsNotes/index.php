@@ -60,6 +60,7 @@ $this->pageTitle=Yii::app()->name . ' - CurlBsNotes';
             'id',
             'data_content',
             'out_content',
+            'cmd_content',
             'message',
             'status_type',
         ),

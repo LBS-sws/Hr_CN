@@ -456,6 +456,17 @@ class Email {
         }
     }
 
+    //添加收信人(lcu）多个账号
+    public function addEmailToLcuList($lcuList){
+        if(is_array($lcuList)){
+            foreach ($lcuList as $lcu){
+                $this->addEmailToLcu($lcu);
+            }
+        }else{
+            $this->addEmailToLcu($lcuList);
+        }
+    }
+
     //添加收信人(員工id）
     public function addEmailToStaffId($staffId){
         $suffix = Yii::app()->params['envSuffix'];

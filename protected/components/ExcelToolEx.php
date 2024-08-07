@@ -38,6 +38,21 @@ class ExcelToolEx extends ExcelTool {
 		$range = $column1.$row1.':'.$column2.$row2;
 		$this->objPHPExcel->getActiveSheet()->getStyle($range)->applyFromArray($styleArray);
 	}
+
+	public function setBorderStyle($cells) {
+		$styleArray = array(
+			'borders'=>array(
+				'allborders'=>array(
+					'style'=>PHPExcel_Style_Border::BORDER_THIN,
+				),
+			)
+		);
+		$this->objPHPExcel->getActiveSheet()->getStyle($cells)->applyFromArray($styleArray);
+	}
+
+	public function setRowHeight($row,$height){
+        $this->objPHPExcel->getActiveSheet()->getRowDimension($row)->setRowHeight($height);
+    }
 	
 	public function setGroupHeaderStyle($row1, $col1, $row2, $col2) {
 		$this->objPHPExcel->getActiveSheet()->getStyleByColumnAndRow($col1,$row1)->getFont()
