@@ -44,6 +44,7 @@ class RptStaffExList extends CReport {//员工花名册
 			'change_dt'=>array('label'=>Yii::t('report','Leave Date'),'width'=>15,'align'=>'C'),//离职日期
 			'reason'=>array('label'=>Yii::t('report','Leave Reason'),'width'=>40,'align'=>'L'),//离职原因
 			'remarks'=>array('label'=>Yii::t('report','Remarks'),'width'=>40,'align'=>'L'),//备注
+			'year_day'=>array('label'=>Yii::t('contract','Annual leave'),'width'=>40,'align'=>'L'),//年假
 		);
 	}
 
@@ -155,6 +156,7 @@ class RptStaffExList extends CReport {//员工花名册
                     $temp['table_type'].= "(离职)";
                 }
                 $temp['remarks'] = $row['remark'];
+                $temp['year_day'] = $row['year_day'];
                 $this->data[] = $temp;
             }
         }
