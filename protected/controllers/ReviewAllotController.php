@@ -75,10 +75,10 @@ class ReviewAllotController extends Controller
         }
     }
 
-    public function actionView($index)
+    public function actionView($index,$year,$year_type)
     {
         $model = new ReviewAllotForm('view');
-        if (!$model->retrieveData($index)) {
+        if (!$model->retrieveData($index,$year,$year_type)) {
             throw new CHttpException(404,'The requested page does not exist.');
         } else {
             $this->render('form',array('model'=>$model,));

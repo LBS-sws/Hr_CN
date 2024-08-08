@@ -624,7 +624,7 @@ class ReviewAllotForm extends CFormModel
             ->leftJoin("hr_employee a","a.id=g.employee_id")
             ->leftJoin("hr_dept d","a.position = d.id")
             ->leftJoin("security{$suffix}.sec_user f","g.user_id = f.username")
-            ->where("(((FIND_IN_SET('{$city}',f.look_city)) and d.review_leave=1) or d.review_leave = 2 $sql) AND a.staff_status = 0")->queryAll();
+            ->where("(((FIND_IN_SET('{$city}',f.look_city)) and d.review_leave=1) or d.review_leave = 2 $sql) AND a.staff_status != -1")->queryAll();
         foreach ($rows as $row){
             $arr[$row["id"]] = $row["code"]." - ".$row["name"];
         }
