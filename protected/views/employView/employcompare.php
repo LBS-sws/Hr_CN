@@ -1,4 +1,12 @@
-
+<div class="form-group">
+    <!--分割-->
+    <?php echo $form->label($model,'city',array('class'=>"col-sm-2 control-label","required"=>true)); ?>
+    <div class="col-sm-3">
+        <?php echo $form->dropDownListCompare($oldModel,$model, 'city',StaffFun::getCityForCityAllow(Yii::app()->user->city_allow()),
+            array('disabled'=>($readonly))
+        ); ?>
+    </div>
+</div>
 <legend><?php echo Yii::t("contract","personal data");?></legend>
 <div class="form-group">
     <?php echo $form->label($model,'name',array('class'=>"col-sm-2 control-label","required"=>true)); ?>

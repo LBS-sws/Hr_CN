@@ -51,6 +51,18 @@ class BsStaffModel {
         }else{
             $data["staffList"]["db_type"] = "add";
         }
+        //离职日期
+        if(key_exists("employeeStatus",$recordInfo)&&$recordInfo["employeeStatus"]==8) {//离职
+            if($data["staffList"]["db_type"] == "add"){
+                return array("bool"=>false,"error"=>$staffList["name"]."：LBS系统内没找到该员工。");
+            }else{
+                $lastWorkDate = key_exists("lastWorkDate",$recordInfo)?$recordInfo["lastWorkDate"]:"";
+                $data["staffList"]["staff_status"] = -1;//离职
+                $data["staffList"]["leave_time"] = date_format(date_create($lastWorkDate),"Y/m/d");
+                $data["staffList"]["leave_reason"] = $recordInfo["changeReason"];
+                return array("bool"=>true,"error"=>"");
+            }
+        }
         //入职日期
         if(key_exists("entryDate",$recordInfo)){//入职日期
             if(empty($recordInfo["entryDate"])){
@@ -140,12 +152,6 @@ class BsStaffModel {
         if(is_array($recordInfo["customProperties"])&&key_exists("extduizhangzuzhang_611774_1810504733",$recordInfo["customProperties"])){
             $staff_leader = self::getStaffLeaderForBsDui($recordInfo["customProperties"]["extduizhangzuzhang_611774_1810504733"]);
             $data["staffList"]["staff_leader"] = $staff_leader;
-        }
-        //离职日期
-        if(key_exists("employeeStatus",$recordInfo)&&$recordInfo["employeeStatus"]==8) {//离职
-            $data["staffList"]["staff_status"] = -1;//离职
-            $data["staffList"]["leave_time"] = date_format(date_create($recordInfo["lastWorkDate"]),"Y/m/d");
-            $data["staffList"]["leave_reason"] = $recordInfo["changeReason"];
         }
         //备注
         if(key_exists("remarks",$recordInfo)) {//备注
@@ -301,9 +307,21 @@ class BsStaffModel {
             unset($staffList["db_type"]);
             $staff_id = $staffList["id"];
             unset($staffList["id"]);
+            $history_id=null;
+            $row = Yii::app()->db->createCommand()->select("*")->from("hr{$suffix}.hr_employee")
+                ->where("id=:id",array(":id"=>$staff_id))->queryRow();
             $returnList["msg"] = $staffList["name"]."：修改成功({$staff_id})";
-            $db->createCommand()->update("hr{$suffix}.hr_employee",$staffList,"id=".$staff_id);
+            $updateBool = $db->createCommand()->update("hr{$suffix}.hr_employee",$staffList,"id=".$staff_id);
+
+            if($updateBool){
+                unset($row["id"]);
+                $row["employee_id"]=$staff_id;
+                $row["finish"] = 1;
+                $db->createCommand()->insert("hr{$suffix}.hr_employee_operate",$row);
+                $history_id = Yii::app()->db->getLastInsertID();
+            }
             $db->createCommand()->insert("hr{$suffix}.hr_employee_history",array(
+                "history_id"=>$history_id,
                 "employee_id"=>$staff_id,
                 "status"=>"bs curl update",
                 "lcu"=>"bsAdmin",
