@@ -27,7 +27,7 @@ class LookupController extends Controller
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('employeeex','company','supplier','staff','cityex','staffEmailEx','staffAllex','product','companyex','supplierex','staffex','productex','template',
-						'account','accountex','applytemplate'
+						'account','accountex','applytemplate','employeeGroupex'
 					),
 				'users'=>array('@'),
 			),
@@ -177,6 +177,28 @@ class LookupController extends Controller
                 $notArr = $list?array_column($list,"employee_id"):array();
                 break;
         }
+        if (count($records) > 0) {
+			foreach ($records as $k=>$record) {
+			    if(!in_array($record['id'],$notArr)){
+                    $result[] = array(
+                        'id'=>$record['id'],
+                        'value'=>$record['name']." ({$record['code']})",
+                    );
+                }
+			}
+		}
+		print json_encode($result);
+	}
+
+	public function actionEmployeeGroupex($search)
+	{
+        $city_allow = Yii::app()->user->city_allow();
+		$result = array();
+		$searchx = str_replace("'","\'",$search);
+        $records = Yii::app()->db->createCommand()->select("id,code,name")
+            ->from("hr_employee")
+            ->where("(name like '%$searchx%' or code like '%$searchx%') and staff_status!=-1")->queryAll();
+		$notArr = array();
         if (count($records) > 0) {
 			foreach ($records as $k=>$record) {
 			    if(!in_array($record['id'],$notArr)){

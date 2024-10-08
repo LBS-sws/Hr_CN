@@ -246,6 +246,7 @@ return array(
     'look manage set'=>'额外查看设置',
     'report for update'=>'变更人员报表',
     'Curl Bs Notes'=>'北森同步记录',
+    'Group Name'=>'员工分组设置',
     //沈超添加结束
 );
 ?>

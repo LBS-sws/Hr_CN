@@ -468,8 +468,9 @@ class BsStaffModel {
             }
             $html.="</tbody></table>";
             $emailModel->setMessage($html);
-            $userList=array("tonymeng","amy.gz","Alvin.sh");//收件人邮箱
+            $userList=array("tonymeng","amy.gz","Alvin.sh","chenliang.sh");//收件人邮箱
             //$userList=array("shenchao");//收件人邮箱
+            $emailModel->addToAddrEmail("amy.zhang@lbsgroup.com.cn");
             $emailModel->addEmailToLcuList($userList);
             $emailModel->addCCEmailToLcu("Effy");//特别要求:需要抄送
             $content = $this->getExcelForError($errorList);

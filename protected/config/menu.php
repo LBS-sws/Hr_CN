@@ -467,6 +467,10 @@ return array(
 		'access'=>'ZC',
 		'icon'=>'fa-gear',
 		'items'=>array(
+			'Group Name'=>array(//员工分组设置
+				'access'=>'ZC24',
+				'url'=>'/groupName/index',
+			),
 			'Department'=>array(
 				'access'=>'ZC01',
 				//'url'=>'/employer/index',
