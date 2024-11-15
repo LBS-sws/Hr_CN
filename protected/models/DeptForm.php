@@ -340,21 +340,25 @@ class DeptForm extends CFormModel
     //level_type
     public static function getConditionList(){
         return array(
-            0=>"",
-            1=>Yii::t("fete","Technician level"),
-            2=>Yii::t("fete","Technical supervisor"),
-            3=>Yii::t("fete","Other personnel"),
-            4=>Yii::t("fete","KA Technician"),//KA技术服务
+            "0"=>"",
+            "1"=>Yii::t("fete","Technician level"),//地推技术员（包括技术员、中级/高级技术员）
+            "2"=>Yii::t("fete","Technical supervisor"),//地推技术主管（技术主管级以上级别）
+            "4"=>Yii::t("fete","KA Technician"),//KA技术服务
+            "5"=>Yii::t("fete","KA Technician supervisor"),//KA技术主管（技术主管级以上级别）
+            "3"=>Yii::t("fete","Other personnel"),//其它人员
         );
     }
 
     //level_type
     public static function getConditionNameForId($id){
+        $id = "".$id;
         $list = array(
-            0=>"",
-            1=>Yii::t("fete","Tec level"),
-            2=>Yii::t("fete","Tec supervisor"),
-            3=>Yii::t("fete","Other personnel"),
+            "0"=>"",
+            "1"=>Yii::t("fete","Tec level"),
+            "2"=>Yii::t("fete","Tec supervisor"),
+            "3"=>Yii::t("fete","Other personnel"),
+            "4"=>Yii::t("fete","KA Technician"),//KA技术服务
+            "5"=>Yii::t("fete","KA Tec sup"),//KA技术服务
         );
         if(key_exists($id,$list)){
             return $list[$id];

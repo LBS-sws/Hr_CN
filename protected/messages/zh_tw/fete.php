@@ -7,7 +7,7 @@ return array(
     'Two times the salary'=>'兩倍工資',
     'Three times the salary'=>'三倍工資',
     'Log Time'=>'假期天數',
-    'Log Date'=>'時間週期',
+    'Log Date'=>'時間周期',
     'Cost Num'=>'工資倍率',
     'hours'=>'點整',
 
@@ -29,28 +29,28 @@ return array(
 
 
     'Working days'=>'工作日',
-    'Weekend off'=>'週末休息日',
+    'Weekend off'=>'周末休息日',
     'Statutory leave day'=>'法定休假日',
     'user lcu'=>'部門經理',
     'user lcd'=>'部門經理審核時間',
     'area lcu'=>'地區審核人',
     'area lcd'=>'地區審核時間',
     'head lcu'=>'地區總監',
-    'head lcd'=>'地區總監審核時間',
+    'head lcd'=>'總監審核時間',
     'you lcu'=>'審核人',
     'you lcd'=>'審核時間',
 
-    'This time period is not a legal holiday, please contact the administrator'=>'該時間段不是法定休假日，請與管理員聯繫',
-    'This time period is not a weekend'=>'改時間段不是週末',
-    'approve'=>'批准',
+    'This time period is not a legal holiday, please contact the administrator'=>'該時間段不是法定節假日，請與管理員聯系',
+    'This time period is not a weekend'=>'該時間段不是周末',
+    'approve'=>'批準',
     'Overtime record this month'=>'本月加班記錄',
     'Leave record this month'=>'本月請假記錄',
 
     'Vacation Name'=>'請假類型',
-    'Vacation Form'=>'請假配置列表',
+    'Vacation Form'=>'請假配置表單',
     'deduct multiple'=>'倍數',
-    'most number of days'=>'最大天數',
-    'or max number of days'=>'是否有最大天數限制',
+    'most number of days'=>'最多天數',
+    'or max number of days'=>'是否有最大天數',
     'Whether to deduct salary'=>'是否扣減工資',
     'Start time cannot be greater than end time'=>'開始時間不能大於結束時間',
 
@@ -76,7 +76,7 @@ return array(
     'Vacation Type'=>'假期種類',
     'annual leave'=>'年休假',
     'Overtime, special accommodation'=>'加班調休、特別調休',
-    'Overtime, annual leave, special accommodation.'=>'加班調休、年休假、特別調休',
+    'Overtime, annual leave, special accommodation'=>'加班調休、年休假、特別調休',
     'Wedding leave, funeral leave, nursing leave, maternity leave, late childbirth, breast-feeding leave'=>'婚假、喪假、護理假、產假、晚育假、哺乳假',
     'Prenatal leave, sick leave'=>'產前假、病假',
     'Private affair leave'=>'事假',
@@ -92,9 +92,9 @@ return array(
     'Evaluation list'=>'評估列表',
     'Evaluation Form'=>'評估表單',
     'Evaluation Time'=>'評估日期',
-    'work_type'=>'工種',
     'service effect'=>'服務效果',
     'service process'=>'服務流程',
+    'work_type'=>'工種',
     'carefully'=>'細心度',
     'judge'=>'判斷力',
     'deal'=>'處理能力',
@@ -109,7 +109,7 @@ return array(
     'sent email'=>'發送郵件',
     'recipient'=>'收件人',
 
-    //锦旗
+    //錦旗
     'Pennants Form'=>'錦旗表單',
     'cleaner'=>'清潔',
     'cleaner and exterminators'=>'清潔滅蟲',
@@ -138,14 +138,18 @@ return array(
     'prize type'=>'客戶獎勵',
     'type number'=>'錦旗總數',
 
-    'level'=>'等级',
+    'level'=>'等級',
     'professional'=>'專業組',
     'preliminary'=>'初階組',
     'Month'=>'月份',
+
+    'Personal subtotal'=>'個人小計',
+    'total'=>'總計',
+    'ranking'=>'排名',
     'technician'=>'技術員',
 
     //2018-04-23
-    'staff type'=>'工种',
+    'staff type'=>'工種',
 
     //2018-04-24
     'evaluator'=>'評估人',
@@ -169,11 +173,11 @@ return array(
 
     //2019-11-12
     'Assessment score score reference:'=>"評核分數得分參考：",
-    'The starting point of each score is 6, with 6 as the central axis'=>"每壹項評分的起步點在6分，6為中軸",
-    '0-3: a 0-3 rating is given for even one example of an action that touches or undermines the group\'s philosophy and principles'=>"0-3分：如果有行為觸動或破壞了集團的理念和原則的話，哪怕是只有壹個例子，也會予以0-3級別",
+    'The starting point of each score is 6, with 6 as the central axis'=>"每一項評分的起步點在6分，6為中軸",
+    '0-3: a 0-3 rating is given for even one example of an action that touches or undermines the group\'s philosophy and principles'=>"0-3分：如果有行為觸動或破壞了集團的理念和原則的話，哪怕是只有一個例子，也會予以0-3級別",
     '4 points: there are obvious examples'=>"4分：有出現明顯例子",
     '5 points: give 5 points if you don\'t do well in a project'=>"5分：如果有項目成績不太好的就給5分",
-    '6 points: the generic example has no obvious example, and there is room for further improvement, can give 6 points'=>"6分：泛例沒有明顯例子的，而且有更進壹步的進步空間，可以給6分",
+    '6 points: the generic example has no obvious example, and there is room for further improvement, can give 6 points'=>"6分：泛例沒有明顯例子的，而且有更進一步的進步空間，可以給6分",
     '7 points: 7 points for doing better than expected'=>"7分：如果比想象做的不錯出色的給7分",
     '8-9 points: for the city level managed by a colleague, he/she will be given 8 or 9 points according to the size of the city he/she manages, and 8 or 9 points must be supported by substantial examples in the evaluation period at that time'=>"8-9分：同事在管理的城市水平上，按他所在管理城市的規模有相應高於要求的水平，會給8、 9分，8、9分必須在當時評核時段有實質例子支持",
     '10 points: if there are more than 3 outstanding examples, you can give 10 points (although this is not easily achieved by colleagues, so it is very rare).'=>"10分：如果出色的例子多於3個，可以給10分（當然這個也不會輕易有同事達到，所以也十分罕有）",
@@ -201,8 +205,8 @@ return array(
     'compensatory leave'=>'加班調休',
 
     //2023-05-23
-    'Technician level'=>'技術員級別（包括技術員、中級/高級技術員）',
-    'Technical supervisor'=>'技術主管（技術主管級以上級別）',
+    'Technician level'=>'地推技術員（包括技術員、中級/高級技術員）',
+    'Technical supervisor'=>'地推技術主管（技術主管級以上級別）',
     'Tec level'=>'技術員級別',
     'Tec supervisor'=>'技術主管',
     'Other personnel'=>'其它人員',
@@ -213,9 +217,9 @@ return array(
     'trip list'=>'出差列表',
     'trip code'=>'出差編號',
     'trip address'=>'目的地',
-    'trip date'=>'出差時間',
+    'trip date'=>'計劃出差時間',
     'trip cause'=>'出差目的',
-    'trip cost'=>'預估总費用',
+    'trip cost'=>'預估總費用',
     'trip log time'=>'出差總時長',
     'trip lcu'=>'審核賬號',
     'trip lcd'=>'審核時間',
@@ -230,6 +234,8 @@ return array(
     'audited, pending result'=>'已審核，等待出差結果',
     'company name'=>'公司名稱',
 
-    'KA Technician'=>'KA技術服務',
+    'KA Technician'=>'KA技術員',
+    'KA Technician supervisor'=>'KA技術主管（技術主管級以上級別）',
+    'KA Tec sup'=>'KA技術主管',
 );
 ?>

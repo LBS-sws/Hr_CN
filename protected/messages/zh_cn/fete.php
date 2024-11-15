@@ -205,8 +205,8 @@ return array(
     'compensatory leave'=>'加班调休',
 
     //2023-05-23
-    'Technician level'=>'技术员级别（包括技术员、中级/高级技术员）',
-    'Technical supervisor'=>'技术主管（技术主管级以上级别）',
+    'Technician level'=>'地推技术员（包括技术员、中级/高级技术员）',
+    'Technical supervisor'=>'地推技术主管（技术主管级以上级别）',
     'Tec level'=>'技术员级别',
     'Tec supervisor'=>'技术主管',
     'Other personnel'=>'其它人员',
@@ -234,6 +234,8 @@ return array(
     'audited, pending result'=>'已审核，等待出差结果',
     'company name'=>'公司名称',
 
-    'KA Technician'=>'KA技术服务',
+    'KA Technician'=>'KA技术员',
+    'KA Technician supervisor'=>'KA技术主管（技术主管级以上级别）',
+    'KA Tec sup'=>'KA技术主管',
 );
 ?>
