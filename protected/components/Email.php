@@ -686,6 +686,7 @@ class Email {
             array('email'=>"candy@lbsgroup.com.cn",'username'=>"candy"),
             array('email'=>"yshe.sh@lbsgroup.com.cn",'username'=>"yusan.sh"),
             array('email'=>"mingll.gz@lbsgroup.com.cn",'username'=>"liuming.gz"),
+            array('email'=>"liufeng.sh@lbsgroup.com.cn",'username'=>"liufeng.sh"),
             //array('email'=>"tak@lbsgroup.com.cn",'username'=>"tak"),
             //array('email'=>"shunman@lbsgroup.com.cn",'username'=>"shunman"),
             //array('email'=>"kittyzhou@lbsgroup.com.cn",'username'=>"kittyzhou")
