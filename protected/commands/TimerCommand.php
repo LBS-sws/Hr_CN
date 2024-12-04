@@ -63,8 +63,8 @@ class TimerCommand extends CConsoleCommand {
 
         $this->sendEmail();//統一發送郵件
 
-        $this->probationEndHint();//试用期即将结束的邮件提醒14天、7天、当天
-        $this->dailyInAndOutHint();//入职、离职总览电邮
+        $this->probationEndHint();//试用期即将结束的邮件提醒14天、7天、当天（只提醒澳门）
+        $this->dailyInAndOutHint();//入职、离职总览电邮（只提醒澳门）
         $this->resetBossListScore();//老总年度考核的總分重新計算
 
         $this->resetTreaty();//合约提醒功能（需要每天刷新合约的状态）
@@ -110,9 +110,9 @@ class TimerCommand extends CConsoleCommand {
             $sql = "UPDATE hr_employee a LEFT JOIN hr_contract b ON a.contract_id = b.id SET a.z_index = 0 WHERE ";
             $sql.= "a.birth_time is not null and a.birth_time != '' and a.staff_status=0 and b.retire=0 and ((replace(a.birth_time,'-', '/') <='$womanDate' and a.sex='woman') or (replace(a.birth_time,'-', '/') <='$manDate' and a.sex='man'))";
             Yii::app()->db->createCommand($sql)->execute();//要退休的員工前排顯示
-            $this->retireToMonth($manDate,$womanDate);//員工退休後是否簽署退休合同（提前一個月）
-            $this->retireToWeek($manDate,$womanDate);//員工退休後是否簽署退休合同（提前一個星期）
-            $this->retireToAgo($manDate,$womanDate);//員工退休後是否簽署退休合同（超過退休年齡未修改合同）
+            //$this->retireToMonth($manDate,$womanDate);//員工退休後是否簽署退休合同（提前一個月）
+            //$this->retireToWeek($manDate,$womanDate);//員工退休後是否簽署退休合同（提前一個星期）
+            //$this->retireToAgo($manDate,$womanDate);//員工退休後是否簽署退休合同（超過退休年齡未修改合同）
         }
     }
 
@@ -189,7 +189,8 @@ class TimerCommand extends CConsoleCommand {
             ->leftJoin("security$suffix.sec_city b","a.city = b.code")//職位
             ->leftJoin("hr_dept d","a.position = d.id")//職位
             ->leftJoin("hr_dept e","a.department = e.id")//部門
-            ->where("(date_format(a.lcd,'%Y/%m/%d') = '$date' and a.staff_status in (0,4)) or (date_format(a.lud,'%Y/%m/%d') = '$date' and a.staff_status=-1)")->order("a.city desc")->queryAll();
+            ->where("a.city='MO' and (date_format(a.lcd,'%Y/%m/%d') = '$date' and a.staff_status in (0,4)) or (date_format(a.lud,'%Y/%m/%d') = '$date' and a.staff_status=-1)")->order("a.city desc")->queryAll();
+        //只提醒澳门
         if($rows){
             foreach ($rows as $row){
                 $trHtml="<tr>";
@@ -990,8 +991,8 @@ class TimerCommand extends CConsoleCommand {
             ->from("hr_employee a")
             ->leftJoin("hr_dept b","a.position = b.id")
             ->leftJoin("security{$suffix}.sec_city f","a.city = f.code")
-            ->where("a.test_type=1 and a.staff_status not in (-1,1) and replace(test_end_time,'/', '-') in ('{$dayOne}','{$dayTwo}','{$dayThree}')")->queryAll();
-        //var_dump($rows);
+            ->where("a.city ='MO' and a.test_type=1 and a.staff_status not in (-1,1) and replace(test_end_time,'/', '-') in ('{$dayOne}','{$dayTwo}','{$dayThree}')")->queryAll();
+        //只提醒澳门地区
         if($rows){
             $setSubject="试用期到期提醒";
             $email = new Email($setSubject,"",$setSubject);
