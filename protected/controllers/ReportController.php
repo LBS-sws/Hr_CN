@@ -17,6 +17,7 @@ class ReportController extends Controller
         'staffDeparture'=>'YB13',
         'testStaff'=>'YB13',//测试员工名册
         'staffUpdate'=>'YB15',//变更人員報表
+        'workCompensatory'=>'YB16',//加班报表（未调休）
     );
 	
 	public function filters()
@@ -272,6 +273,27 @@ class ReportController extends Controller
             }
         }
         $this->render('form_staff',array('model'=>$model,'submit'=>Yii::app()->createUrl('report/staffUpdate')));
+    }
+
+    public function actionWorkCompensatory() {
+		$this->function_id = self::$actions['workCompensatory'];
+		Yii::app()->session['active_func'] = $this->function_id;
+
+        $model = new ReportY05Form;
+        $model->id = "RptWorkCompensatory";
+        $model->name = Yii::t('app','Work Compensatory List');
+        $model->fields = 'city';
+        if (isset($_POST['ReportY05Form'])) {
+            $model->attributes = $_POST['ReportY05Form'];
+            if ($model->validate()) {
+                $model->addQueueItem();
+                Dialog::message(Yii::t('dialog','Information'), Yii::t('dialog','Report submitted. Please go to Report Manager to retrieve the output.'));
+            } else {
+                $message = CHtml::errorSummary($model);
+                Dialog::message(Yii::t('dialog','Validation Message'), $message);
+            }
+        }
+        $this->render('form_y05',array('model'=>$model,'submit'=>Yii::app()->createUrl('report/workCompensatory')));
     }
 
     public function actionPinReport() {

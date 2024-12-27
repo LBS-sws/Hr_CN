@@ -248,6 +248,7 @@ return array(
     'report for update'=>'變更人員報表',
     'Curl Bs Notes'=>'北森同步記錄',
     'Group Name'=>'員工分組設置',
+    'Work Compensatory List'=>'加班後未調休報表',
 //沈超添加結束
 );
 ?>

@@ -584,6 +584,10 @@ return array(
 				'access'=>'YB02',
                 'url'=>'/report/overtimelist',
 			),
+			'Work Compensatory List'=>array(//加班请假报表（未调休）
+				'access'=>'YB16',
+                'url'=>'/report/workCompensatory',
+			),
 			'Leave record List'=>array(
 				'access'=>'YB03',
                 'url'=>'/report/leavelist',

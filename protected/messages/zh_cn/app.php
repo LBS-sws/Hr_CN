@@ -247,6 +247,7 @@ return array(
     'report for update'=>'变更人员报表',
     'Curl Bs Notes'=>'北森同步记录',
     'Group Name'=>'员工分组设置',
+    'Work Compensatory List'=>'加班后未调休报表',
     //沈超添加结束
 );
 ?>
