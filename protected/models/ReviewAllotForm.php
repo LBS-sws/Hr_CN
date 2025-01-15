@@ -426,13 +426,9 @@ class ReviewAllotForm extends CFormModel
             $this->code = $row['code'];
             $this->phone = $row['phone'];
             $review = Yii::app()->db->createCommand()->select("*")->from("hr_review")
-                ->where("employee_id=:id and year = :year and year_type = :year_type",
-                    array(
-                        ":id"=>$row["id"],
-                        ":year"=>$year,
-                        ":year_type"=>$year_type,
-                    )
-                )->queryRow();
+                ->where("employee_id=:id and year = :year",
+                    array(":id"=>$row["id"],":year"=>$year)
+                )->order("year desc,year_type desc")->queryRow();
             if($review){
                 $this->change_num = $review['change_num'];
                 if($review['status_type'] != 4){

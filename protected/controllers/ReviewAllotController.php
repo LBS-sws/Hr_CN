@@ -130,7 +130,7 @@ class ReviewAllotController extends Controller
         $model = new ReviewAllotForm;
         if(isset($_POST['ReviewAllotList']['attr'])){
             $year = isset($_POST['ReviewAllotList']['year'])?$_POST['ReviewAllotList']['year']:2022;
-            $month = isset($_POST['ReviewAllotList']['month'])?$_POST['ReviewAllotList']['month']:1;
+            $month = isset($_POST['ReviewAllotList']['year_type'])?$_POST['ReviewAllotList']['year_type']:1;
             $idList = $_POST['ReviewAllotList']['attr'];
             $model->bulkAllot($idList,$year,$month);
             $this->redirect(Yii::app()->createUrl('reviewAllot/index'));
