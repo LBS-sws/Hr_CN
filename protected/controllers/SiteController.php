@@ -8,7 +8,7 @@ class SiteController extends Controller
 			'enforceRegisteredStation - error', //apply station checking, except error page
 			'enforceSessionExpiration - error,login,logout', 
 			'enforceNoConcurrentLogin - error,login,logout',
-			'accessControl - error,login,index,home', // perform access control for CRUD operations
+			'accessControl - error,login,loginOld,index,home,resetloginpassword', // perform access control for CRUD operations
 		);
 	}
 
@@ -97,10 +97,24 @@ class SiteController extends Controller
 		}
 	}
 
+
+    /**
+     * Displays the login page
+     */
+    public function actionLogin()
+    {
+        //$lbsUrl = str_replace(Yii::app()->getBaseUrl(false),'',Yii::app()->getBaseUrl(true));
+        //$lbsUrl.= Yii::app()->request->url;
+        $lbsUrl = Yii::app()->getBaseUrl(true);
+        $lbsUrl = urlencode($lbsUrl);
+        $muUrl = Yii::app()->params['MHCurlRootURL']."/cas/login?service=".$lbsUrl;
+        $this->redirect($muUrl);
+    }
+
 	/**
 	 * Displays the login page
 	 */
-	public function actionLogin()
+	public function actionLoginOld()
 	{
 		$model=new LoginForm;
 
@@ -195,4 +209,45 @@ class SiteController extends Controller
 		$model->language = Yii::app()->language;
 		$this->render('language',array('model'=>$model));
 	}
+	
+	public function actionNotifyopt() {
+		$model=new NotifyoptForm;
+
+		if(isset($_POST['NotifyoptForm'])) {
+			$model->attributes=$_POST['NotifyoptForm'];
+			$model->save();
+			Dialog::message('Info', Yii::t('dialog','Option changed'));
+		}
+		$model->retrieveData();
+		$this->render('notifyopt',array('model'=>$model));
+	}
+
+    public function actionResetLoginPassword()
+    {
+        $model=new ResetPasswordForm;
+        if(isset($_POST['ajax']) && $_POST['ajax']==='reset-login-form')
+        {
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
+        }
+        // collect user input data
+        if(isset($_POST['ResetPasswordForm']))
+        {
+            $model->attributes=$_POST['ResetPasswordForm'];
+            if($model->validate())
+            {
+                $result = (new User())->resetPassword($_POST['ResetPasswordForm']['username'],$_POST['ResetPasswordForm']['new_password']);
+                if($result['status']) $this->redirect(Yii::app()->user->loginUrl);
+                Dialog::message('Validation Message', $result['msg']);
+            }
+            else
+            {
+                $message=CHtml::errorSummary($model);
+                Dialog::message('Validation Message', $message);
+            }
+        }
+//        print_r($_POST);exit;
+        $this->layout = "main_reset_login";
+        $this->render('resetloginpassword',array('model'=>$model));
+    }
 }

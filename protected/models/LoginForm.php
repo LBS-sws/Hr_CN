@@ -10,6 +10,7 @@ class LoginForm extends CFormModel
 	public $username;
 	public $password;
 	public $rememberMe;
+    public $errorCode;
 
 	private $_identity;
 
@@ -59,6 +60,11 @@ class LoginForm extends CFormModel
 					case UserIdentity::ERROR_FAIL_EXCESS:
 						$errmsg = Yii::t('dialog','Account is locked.');
 						break;
+                    case UserIdentity::ERROR_RESET_PASSWORD:
+                        $this->errorCode = UserIdentity::ERROR_RESET_PASSWORD;
+                        $errmsg = Yii::t('dialog','Please reset password');
+
+                        break;
 					default:
 						$errmsg = Yii::t('dialog','Unable to login.');
 				}
@@ -84,4 +90,33 @@ class LoginForm extends CFormModel
 			return false;
 		}
 	}
+
+    /**
+     * 门户网站单点登录
+     * @return boolean whether login is successful
+     */
+    public function MHLogin($staffCode)	{
+
+        if($this->_identity===null) {
+            $suffix = Yii::app()->params['envSuffix'];
+            $staffRow = Yii::app()->db->createCommand()->select("a.user_id")
+                ->from("hr{$suffix}.hr_binding a")
+                ->leftJoin("hr{$suffix}.hr_employee b","a.employee_id=b.id")
+                ->where("b.code=:code",array(":code"=>$staffCode))->queryRow();
+            if($staffRow){
+                $this->username = $staffRow["user_id"];
+                $this->_identity=new UserIdentity($this->username,$this->password);
+                $this->_identity->MHAuthenticate();
+            }else{
+                Dialog::message(Yii::t('dialog','Validation Message'), "员工:{$staffCode}，未绑定账号");
+            }
+        }
+        if(!empty($this->_identity)&&$this->_identity->errorCode===UserIdentity::ERROR_NONE) {
+            $duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days
+            Yii::app()->user->login($this->_identity,$duration);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
